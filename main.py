@@ -1,9 +1,10 @@
-from ollama_client import chat
+from llm_client import LLMClient
+from ollama_client import OllamaClient
 
-def main():
-    answer = chat("Explique em uma frase o que é um agente de IA.")
+def main(client: LLMClient):
+    answer = client.chat("Explique em uma frase o que é um agente de IA.")
     print(answer)
 
 
 if __name__ == "__main__":
-    main()
+    main(OllamaClient())
