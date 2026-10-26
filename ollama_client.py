@@ -2,9 +2,12 @@ import json
 from urllib.request import Request, urlopen
 
 class OllamaClient:
+    def __init__(self, model: str):
+        self.model = model
+
     def chat(self, message: str) -> str:
         payload = {
-            "model": "qwen3.5:0.8b",
+            "model": self.model,
             "messages": [
                 {"role": "user", "content": message}
             ],
