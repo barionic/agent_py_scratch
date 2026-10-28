@@ -1,8 +1,12 @@
 # Diário de Engenharia de Agentes
 
 ## Objetivo
-Aprender engenharia de agentes de IA construindo um projeto
-em Python, com experimentos pequenos e compreensão das decisões.
+Aprender engenharia de agentes de IA construindo um projeto em Python, com experimentos pequenos e compreensão das decisões.
+
+## Histórico anterior
+- As Missões 001–008 fazem parte da etapa inicial de aprendizagem, registrada originalmente nas conversas.
+- O conteúdo detalhado dessas missões ainda não foi reconstruído e confirmado neste diário.
+- O registro detalhado disponível neste documento começa na Missão 009.
 
 ## Missão 009 — Cliente Ollama
 - Estudamos HTTP, JSON, urllib, type hints e return vs print.
@@ -43,39 +47,49 @@ em Python, com experimentos pequenos e compreensão das decisões.
 - Commit: c7e25a5 — feat: add OpenRouter LLM client
 
 ## Missão 019 — Representação do resultado da geração
-
-- Criamos `FinishReason` com os estados `COMPLETED`,
-  `LENGTH_LIMIT` e `UNKNOWN`.
-- Criamos `GenerationResult`, agrupando o texto gerado
-  e o motivo do encerramento.
-- Atualizamos o contrato `LLMClient` para retornar
-  `GenerationResult`.
+- Criamos `FinishReason` com os estados `COMPLETED`,`LENGTH_LIMIT` e `UNKNOWN`.
+- Criamos `GenerationResult`, agrupando o texto gerado e o motivo do encerramento.
+- Atualizamos o contrato `LLMClient` para retornar `GenerationResult`.
 - Adaptamos `FakeLLMClient` e `app.py`.
 - Adaptamos `OpenRouterClient`, normalizando `finish_reason`.
 - Adaptamos `OllamaClient`, normalizando `done_reason`.
 - Testamos os três provedores: Fake, OpenRouter e Ollama.
 - Observamos respostas interrompidas por limites de geração.
-- Aprendemos que o encerramento técnico não garante
-  que a resposta seja suficiente ou factualmente correta.
+- Aprendemos que o encerramento técnico não garante que a resposta seja suficiente ou factualmente correta.
 - Mantivemos os diagnósticos de experimentação comentados.
 
-### Aprendizados e decisões pendentes
+## Missão 020 — Integração com Ollama Cloud
+- Criamos OllamaCloudClient em ollama_cloud_client.py.
+- Configuramos o endpoint remoto https://ollama.com/api/chat.
+- Configuramos a autenticação por OLLAMA_API_KEY, obtida do ambiente.
+- Integramos o provedor ollama-cloud à seleção de clientes em main.py.
+- Mantivemos o contrato LLMClient e o retorno GenerationResult.
+- Consultamos /api/tags para identificar os modelos disponíveis no Cloud.
+- Observamos HTTP 404 ao tentar usar qwen3.5:0.8b, que não constava na lista retornada.
+- Observamos HTTP 402 ao tentar usar gpt-oss:20b, indicando exigência de pagamento.
+- Testamos o modelo beam: uma resposta retornou LENGTH_LIMIT e outra retornou COMPLETED.
+- Validamos a integração sem armazenar a chave no repositório.
 
-- O limite de tokens continua sendo um parâmetro técnico,
-  não uma meta de tamanho da resposta.
-- Ainda precisamos definir como configurar limites e lidar
-  com respostas interrompidas.
-- A concisão e o aprofundamento sob demanda serão explorados
-  numa etapa posterior.
+### Aprendizados
+
+- O limite de tokens continua sendo um parâmetro técnico, não uma meta de tamanho da resposta.
+- A concisão e o aprofundamento sob demanda serão explorados numa etapa posterior.
+- Modelos disponíveis localmente não estão necessariamente disponíveis no Ollama Cloud.
+- A listagem de modelos não garante acesso gratuito à geração.
+- O contrato comum permite adicionar outro provedor sem alterar a interface esperada pela aplicação.
+- Os motivos de encerramento continuam sendo normalizados entre provedores.
+- O encerramento técnico não garante que a resposta seja suficiente ou factualmente correta.
+
+### Decisões pendentes
+
+- Definir como configurar os limites de geração.
+- Definir como a aplicação deve lidar com respostas interrompidas.
 
 ### Próximos passos
 
-- Revisar a implementação e o estado do Git.
-- Confirmar os arquivos finais e os testes.
-- Atualizar este diário e fechar a missão com um commit.
-- Depois, retomar a evolução do comportamento do agente,
-  incluindo instruções, identidade e personalidade.
-- Investigar a integração com Ollama Cloud numa etapa futura.
+- Confirmar o estado final dos arquivos e os testes da Missão 020.
+- Atualizar o diário e fechar a missão com um commit.
+- Retomar a evolução do comportamento do agente, incluindo instruções, identidade e personalidade, conforme o roadmap.
 
 ## Método de aprendizagem
 1. Entender o problema e formular uma hipótese.

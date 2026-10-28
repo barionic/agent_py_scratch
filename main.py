@@ -4,6 +4,7 @@ from app import main
 from ollama_client import OllamaClient
 from fake_llm_client import FakeLLMClient
 from openrouter_client import OpenRouterClient
+from ollama_cloud_client import OllamaCloudClient
 
 def create_client():
     provider = os.getenv("LLM_PROVIDER", "ollama").lower()
@@ -17,6 +18,9 @@ def create_client():
 
     if provider == "openrouter":
         return OpenRouterClient(model=model)
+
+    if provider == "ollama-cloud":
+        return OllamaCloudClient(model=model)
 
     raise ValueError(f"Provedor de LLM desconhecido: {provider}")
 
