@@ -1,15 +1,16 @@
 import json
 import os
 from urllib.request import Request, urlopen
+from urllib.error import HTTPError
 
-from llm_client import LLMClient
+from llm_client import FinishReason, GenerationResult
 
 
 class OpenRouterClient:
     def __init__(self, model: str):
         self.model = model
 
-    def chat(self, message: str) -> str:
+    def chat(self, message: str) -> GenerationResult:
         api_key = os.getenv("OPENROUTER_API_KEY")
 
         if not api_key:
@@ -21,7 +22,7 @@ class OpenRouterClient:
                 {"role": "user", "content": message}
             ],
             "stream": False,
-            "max_tokens": 128
+            "max_tokens": 1024
         }
 
         request = Request(
@@ -34,8 +35,13 @@ class OpenRouterClient:
             method="POST",
         )
 
-        with urlopen(request, timeout=60) as response:
-            result = json.load(response)
+        try:
+            with urlopen(request, timeout=60) as response:
+                result = json.load(response)
+        except HTTPError as error:
+            #print("Status HTTP:", error.code)
+            #print(error.read().decode("utf-8", errors="replace"))
+            raise
 
         message_data = result["choices"][0]["message"]
         content = message_data.get("content")
@@ -44,8 +50,18 @@ class OpenRouterClient:
             model_used = result.get("model", self.model)
             raise RuntimeError(f"O modelo '{model_used}' retornou uma resposta sem conteúdo textual.")
 
-        return content
+        api_reason = result["choices"][0].get("finish_reason")
 
-        
-        #print(json.dumps(result, indent=2, ensure_ascii=False))
-        #return result["choices"][0]["message"].get("content")
+        if api_reason == "stop":
+            finish_reason = FinishReason.COMPLETED
+        elif api_reason == "length":
+            finish_reason = FinishReason.LENGTH_LIMIT
+        else:
+            finish_reason = FinishReason.UNKNOWN
+
+        return GenerationResult(
+            text=content,
+            finish_reason = finish_reason
+        )
+
+# Test to run in terminal: LLM_PROVIDER=openrouter LLM_MODEL=nvidia/nemotron-3-ultra-550b-a55b:free python main.py

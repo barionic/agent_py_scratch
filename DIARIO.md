@@ -42,9 +42,40 @@ em Python, com experimentos pequenos e compreensão das decisões.
 - Adicionamos tratamento explícito para respostas sem texto.
 - Commit: c7e25a5 — feat: add OpenRouter LLM client
 
-## Próxima missão
-019 — Investigar como separar as instruções e a identidade
-do agente em arquivos Markdown e carregá-las na aplicação.
+## Missão 019 — Representação do resultado da geração
+
+- Criamos `FinishReason` com os estados `COMPLETED`,
+  `LENGTH_LIMIT` e `UNKNOWN`.
+- Criamos `GenerationResult`, agrupando o texto gerado
+  e o motivo do encerramento.
+- Atualizamos o contrato `LLMClient` para retornar
+  `GenerationResult`.
+- Adaptamos `FakeLLMClient` e `app.py`.
+- Adaptamos `OpenRouterClient`, normalizando `finish_reason`.
+- Adaptamos `OllamaClient`, normalizando `done_reason`.
+- Testamos os três provedores: Fake, OpenRouter e Ollama.
+- Observamos respostas interrompidas por limites de geração.
+- Aprendemos que o encerramento técnico não garante
+  que a resposta seja suficiente ou factualmente correta.
+- Mantivemos os diagnósticos de experimentação comentados.
+
+### Aprendizados e decisões pendentes
+
+- O limite de tokens continua sendo um parâmetro técnico,
+  não uma meta de tamanho da resposta.
+- Ainda precisamos definir como configurar limites e lidar
+  com respostas interrompidas.
+- A concisão e o aprofundamento sob demanda serão explorados
+  numa etapa posterior.
+
+### Próximos passos
+
+- Revisar a implementação e o estado do Git.
+- Confirmar os arquivos finais e os testes.
+- Atualizar este diário e fechar a missão com um commit.
+- Depois, retomar a evolução do comportamento do agente,
+  incluindo instruções, identidade e personalidade.
+- Investigar a integração com Ollama Cloud numa etapa futura.
 
 ## Método de aprendizagem
 1. Entender o problema e formular uma hipótese.
