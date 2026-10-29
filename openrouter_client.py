@@ -1,16 +1,15 @@
 import json
 import os
 from urllib.request import Request, urlopen
-from urllib.error import HTTPError
 
-from llm_client import FinishReason, GenerationResult
+from llm_client import ChatMessage, FinishReason, GenerationResult
 
 
 class OpenRouterClient:
     def __init__(self, model: str):
         self.model = model
 
-    def chat(self, message: str) -> GenerationResult:
+    def chat(self, messages: list[ChatMessage]) -> GenerationResult:
         api_key = os.getenv("OPENROUTER_API_KEY")
 
         if not api_key:
@@ -19,7 +18,11 @@ class OpenRouterClient:
         payload = {
             "model": self.model,
             "messages": [
-                {"role": "user", "content": message}
+                {
+                    "role": message.role, 
+                    "content": message.content,
+                }
+                for message in messages
             ],
             "stream": False,
             "max_tokens": 1024
@@ -35,14 +38,9 @@ class OpenRouterClient:
             method="POST",
         )
 
-        try:
-            with urlopen(request, timeout=60) as response:
-                result = json.load(response)
-        except HTTPError as error:
-            #print("Status HTTP:", error.code)
-            #print(error.read().decode("utf-8", errors="replace"))
-            raise
-
+        with urlopen(request, timeout=60) as response:
+            result = json.load(response)
+            
         message_data = result["choices"][0]["message"]
         content = message_data.get("content")
 
@@ -61,7 +59,7 @@ class OpenRouterClient:
 
         return GenerationResult(
             text=content,
-            finish_reason = finish_reason
+            finish_reason = finish_reason,
         )
 
 # Test to run in terminal: LLM_PROVIDER=openrouter LLM_MODEL=nvidia/nemotron-3-ultra-550b-a55b:free python main.py

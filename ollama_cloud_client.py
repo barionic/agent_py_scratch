@@ -2,7 +2,7 @@ import json
 import os
 from urllib.request import Request, urlopen
 
-from llm_client import FinishReason, GenerationResult
+from llm_client import ChatMessage, FinishReason, GenerationResult
 
 class OllamaCloudClient:
     def __init__(self, model: str):
@@ -14,11 +14,15 @@ class OllamaCloudClient:
                 "A variável de ambiente OLLAMA_API_KEY não foi configurada"
             )
 
-    def chat(self, message: str) -> GenerationResult:
+    def chat(self, messages: list[ChatMessage]) -> GenerationResult:
         payload = {
             "model": self.model,
             "messages": [
-                {"role": "user", "content": message}
+                {
+                    "role": message.role, 
+                    "content": message.content,
+                }
+                for message in messages
             ],
             "think": False,
             "stream": False,
@@ -42,9 +46,6 @@ class OllamaCloudClient:
 
         done_reason = result.get("done_reason")
 
-        #print("Motivo do encerramento: ", done_reason)
-        #print("Tokens gerados: ", result.get("eval_count"))
-
         if done_reason == "stop":
             finish_reason = FinishReason.COMPLETED
         elif done_reason == "length":
@@ -54,7 +55,7 @@ class OllamaCloudClient:
 
         return GenerationResult(
             text=result["message"]["content"],
-            finish_reason=finish_reason
+            finish_reason=finish_reason,
         )
 
 # Test to run in terminal: LLM_PROVIDER=ollama-cloud LLM_MODEL="beam" python main.py

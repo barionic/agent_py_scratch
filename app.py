@@ -1,13 +1,48 @@
-from llm_client import LLMClient, FinishReason
+from llm_client import LLMClient, FinishReason, ChatMessage
 
 def main(client: LLMClient):
-    #answer = client.chat("Explique em uma frase o que é um agente de IA.")
-    message = input("Você: ")
-    result = client.chat(message)
+    messages: list[ChatMessage] = []
 
-    print(result.text)
+    print("Bimo iniciado :) Digite /sair para encerrar.\n")
 
-    if result.finish_reason == FinishReason.LENGTH_LIMIT:
-        print("\n[AVISO] A resposta pode estar incompleta devido ao limite de geração.")
-    elif result.finish_reason == FinishReason.UNKNOWN:
-        print("\n[AVISO] Não foi possível determinar o motivo de encerramento.")
+    while True:
+        try:
+            message = input("Você: ").strip()
+        except EOFError:
+            print("\nEncerrando conversa.")
+            break
+
+        if message.lower() in {"/sair", "/exit", "/quit"}:
+            print("Bimo: Até mais! :)\n")
+            break
+
+        if not message:
+            continue
+
+        messages.append(ChatMessage(role="user", content=message))
+
+        result = client.chat(messages)
+
+        print(f"Bimo: {result.text}")
+
+        if result.finish_reason == FinishReason.LENGTH_LIMIT:
+            print("\n[AVISO] A resposta pode estar incompleta devido ao limite de geração.")
+        elif result.finish_reason == FinishReason.UNKNOWN:
+                print("\n[AVISO] Não foi possível determinar o motivo de encerramento.")
+
+        # Preserva a resposta no histórico da sessão, mesmo se ela tiver sido interrompida
+        messages.append(
+             ChatMessage(role="assistant", content=result.text)
+        )
+
+        print()
+
+
+
+
+
+
+
+   
+        
+    

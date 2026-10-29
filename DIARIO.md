@@ -79,6 +79,20 @@ Aprender engenharia de agentes de IA construindo um projeto em Python, com exper
 - Criamos testes automatizados para os três estados usando unittest.
 - Executamos os três testes e confirmamos que passaram.
 
+## Mission 022 — Histórico de conversa
+
+- Introduzido `ChatMessage`, representando mensagens com papel e conteúdo.
+- Atualizado o contrato `LLMClient.chat()` para receber o histórico de mensagens.
+- Adaptados os clientes Fake, Ollama local, Ollama Cloud e OpenRouter.
+- Implementado loop contínuo de conversa em `app.py`.
+- Adicionados comandos de saída: `/sair`, `/exit` e `/quit`.
+- Preservados os avisos de `LENGTH_LIMIT` e `UNKNOWN`.
+- Criados testes para entrada vazia, encerramento, estados de geração e histórico entre turnos.
+- Resultado: 6 testes automatizados passaram.
+- Validação manual com Ollama local: o modelo respondeu corretamente ao nome informado no turno anterior.
+- Limitação observada: respostas frequentemente interrompidas pelo limite de geração de 128 tokens.
+- Limitação conhecida: o histórico permanece apenas em memória durante a sessão.
+
 ### Aprendizados
 - O limite de tokens continua sendo um parâmetro técnico, não uma meta de tamanho da resposta.
 - A concisão e o aprofundamento sob demanda serão explorados numa etapa posterior.
