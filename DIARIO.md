@@ -47,7 +47,7 @@ Aprender engenharia de agentes de IA construindo um projeto em Python, com exper
 - Commit: c7e25a5 — feat: add OpenRouter LLM client
 
 ## Missão 019 — Representação do resultado da geração
-- Criamos `FinishReason` com os estados `COMPLETED`,`LENGTH_LIMIT` e `UNKNOWN`.
+- Criamos `FinishReason` com os estados `COMPLETED`, `LENGTH_LIMIT` e `UNKNOWN`.
 - Criamos `GenerationResult`, agrupando o texto gerado e o motivo do encerramento.
 - Atualizamos o contrato `LLMClient` para retornar `GenerationResult`.
 - Adaptamos `FakeLLMClient` e `app.py`.
@@ -70,8 +70,16 @@ Aprender engenharia de agentes de IA construindo um projeto em Python, com exper
 - Testamos o modelo beam: uma resposta retornou LENGTH_LIMIT e outra retornou COMPLETED.
 - Validamos a integração sem armazenar a chave no repositório.
 
-### Aprendizados
+## Missão 021 — Tratamento dos resultados da geração
+- Atualizamos app.py para tratar os estados de encerramento da geração.
+- Para COMPLETED, a resposta é exibida sem aviso adicional.
+- Para LENGTH_LIMIT, a resposta é exibida com um aviso de possível interrupção.
+- Para UNKNOWN, a resposta é exibida com um aviso sobre o motivo desconhecido.
+- Tornamos FakeLLMClient configurável para simular diferentes estados.
+- Criamos testes automatizados para os três estados usando unittest.
+- Executamos os três testes e confirmamos que passaram.
 
+### Aprendizados
 - O limite de tokens continua sendo um parâmetro técnico, não uma meta de tamanho da resposta.
 - A concisão e o aprofundamento sob demanda serão explorados numa etapa posterior.
 - Modelos disponíveis localmente não estão necessariamente disponíveis no Ollama Cloud.
@@ -81,15 +89,14 @@ Aprender engenharia de agentes de IA construindo um projeto em Python, com exper
 - O encerramento técnico não garante que a resposta seja suficiente ou factualmente correta.
 
 ### Decisões pendentes
-
 - Definir como configurar os limites de geração.
-- Definir como a aplicação deve lidar com respostas interrompidas.
+- Investigar como favorecer respostas que concluam unidades de sentido.
+- Projetar uma estratégia de continuação para respostas interrompidas, evitando repetições e perda de contexto.
 
 ### Próximos passos
-
-- Confirmar o estado final dos arquivos e os testes da Missão 020.
-- Atualizar o diário e fechar a missão com um commit.
-- Retomar a evolução do comportamento do agente, incluindo instruções, identidade e personalidade, conforme o roadmap.
+- Implementar um loop de conversa com histórico de mensagens.
+- Investigar instruções de geração e limites adequados para favorecer respostas completas.
+- Avançar na gestão de contexto e memória conforme o roadmap.
 
 ## Método de aprendizagem
 1. Entender o problema e formular uma hipótese.

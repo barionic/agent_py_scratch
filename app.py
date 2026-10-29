@@ -1,4 +1,4 @@
-from llm_client import LLMClient
+from llm_client import LLMClient, FinishReason
 
 def main(client: LLMClient):
     #answer = client.chat("Explique em uma frase o que é um agente de IA.")
@@ -6,4 +6,8 @@ def main(client: LLMClient):
     result = client.chat(message)
 
     print(result.text)
-    print(f"\nMotivo do encerramento: {result.finish_reason.value}")
+
+    if result.finish_reason == FinishReason.LENGTH_LIMIT:
+        print("\n[AVISO] A resposta pode estar incompleta devido ao limite de geração.")
+    elif result.finish_reason == FinishReason.UNKNOWN:
+        print("\n[AVISO] Não foi possível determinar o motivo de encerramento.")
