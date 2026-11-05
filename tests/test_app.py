@@ -9,14 +9,54 @@ from llm_client import ChatMessage, FinishReason
 
 
 class TestApp(unittest.TestCase):
-    def run_app(self, client, user_inputs):
+    def run_app(self, client, user_inputs, system_messages=None):
         output = StringIO()
 
         with patch("builtins.input", side_effect=user_inputs):
             with redirect_stdout(output):
-                main(client)
+                main(client, system_messages)
 
         return output.getvalue()
+
+    def test_system_messages_are_sent_before_user_message(self):
+        client = FakeLLMClient()
+
+        system_messages = [
+            ChatMessage(
+                role="system",
+                content="Você é Bimo.",
+            ),
+            ChatMessage(
+                role="system",
+                content="Colabore e ensine.",
+            ),
+        ]
+
+        self.run_app(
+            client,
+            ["Salve, Bimo!", "/sair"],
+            system_messages
+        )
+
+        first_history = client.received_histories[0]
+
+        self.assertEqual(
+            first_history,
+            [
+                ChatMessage(
+                    role="system",
+                    content="Você é Bimo.",
+                ),
+                ChatMessage(
+                    role="system",
+                    content="Colabore e ensine.",
+                ),
+                ChatMessage(
+                    role="user",
+                    content="Salve, Bimo!",
+                ),
+            ],
+        )
 
     def test_completed_shows_answer_without_warning(self):
         client = FakeLLMClient()

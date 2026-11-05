@@ -6,6 +6,8 @@ from fake_llm_client import FakeLLMClient
 from openrouter_client import OpenRouterClient
 from ollama_cloud_client import OllamaCloudClient
 
+from instruction_loader import load_instructions
+
 def create_client():
     provider = os.getenv("LLM_PROVIDER", "ollama").lower()
     model = os.getenv("LLM_MODEL", "qwen3.5:0.8b")
@@ -25,4 +27,5 @@ def create_client():
     raise ValueError(f"Provedor de LLM desconhecido: {provider}")
 
 if __name__ == "__main__":
-    main(create_client())
+    instructions = load_instructions()
+    main(create_client(), instructions)

@@ -80,7 +80,6 @@ Aprender engenharia de agentes de IA construindo um projeto em Python, com exper
 - Executamos os três testes e confirmamos que passaram.
 
 ## Mission 022 — Histórico de conversa
-
 - Introduzido `ChatMessage`, representando mensagens com papel e conteúdo.
 - Atualizado o contrato `LLMClient.chat()` para receber o histórico de mensagens.
 - Adaptados os clientes Fake, Ollama local, Ollama Cloud e OpenRouter.
@@ -93,6 +92,40 @@ Aprender engenharia de agentes de IA construindo um projeto em Python, com exper
 - Limitação observada: respostas frequentemente interrompidas pelo limite de geração de 128 tokens.
 - Limitação conhecida: o histórico permanece apenas em memória durante a sessão.
 
+## Mission 023 — Identidade e comportamento
+- Estudado o papel das mensagens `system` no contexto de conversas com LLMs.
+- Realizados experimentos comparando instruções genéricas e específicas.
+- Observado que instruções podem influenciar tom, organização e estilo, mas não garantem precisão factual ou cumprimento integral.
+- Identificada a diferença entre personalidade, tom, didática e formato de apresentação.
+- Discutida a distinção entre identidade, comportamento e especialização do agente.
+- Definido o propósito central do Bimo: companheiro de construções digitais criativas.
+- Estabelecida a visão de reduzir a distância entre uma ideia e sua materialização no mundo real.
+- Identificadas como áreas principais desenvolvimento de software, design, UX e criação artística digital.
+- Definidas áreas futuras de expansão: modelagem 3D, ilustração digital, identidade visual e edição de vídeo.
+- Experimentado o aumento de `num_predict` no cliente Ollama para investigar interrupções de geração.
+- Consolidada a visão de colaboração do Bimo: explicar decisões, adaptar a profundidade das explicações e construir sobre conhecimentos anteriores.
+- Definidos princípios de pensamento crítico: questionar premissas, propor alternativas, explicar trade-offs e rever conclusões diante de novas evidências.
+- Definido o princípio de honestidade intelectual: reconhecer incertezas, investigar antes de presumir, comunicar limitações e evitar tentativas repetitivas sem progresso.
+- Estabelecida a importância de demonstrar progresso, comunicando investigações realizadas, resultados obtidos, dúvidas remanescentes e próximos passos.
+- Definida a evolução gradual da autonomia: inicialmente assistida, com apresentação do plano e aprovação antes da implementação.
+- Criado `instructions/SOUL.md`, versão inicial v0.1.
+- Documento revisado e aprovado.
+- Consolidada a separação de responsabilidades entre IDENTITY.md (identidade e propósito) e SOUL.md (princípios comportamentais).
+- Definidas cinco dimensões comportamentais: Collaboration & Learning, Critical Thinking, Intellectual Honesty, Responsible Autonomy e Initiative & Proactivity.
+- Definidos os princípios transversais Demonstrate Progress e Respect the Current Focus.
+- Estabelecida a classificação de prioridades: Must address, Worth considering e Future opportunity.
+- Definido que futuras revisões do SOUL.md serão orientadas por testes e experiências de utilização.
+- Definidos os documentos `IDENTITY.md` e `SOUL.md`, separando identidade e propósito dos princípios comportamentais.
+- Implementado `instruction_loader.py` para carregar os documentos como mensagens system.
+- Integrado o carregamento das instruções ao fluxo principal da aplicação.
+- Criados testes para verificar carregamento, ordenação e tratamento de arquivos ausentes ou vazios.
+- Validada a integração entre instruções system e histórico de conversação.
+- Realizados experimentos com diferentes provedores e modelos para avaliar identidade, pensamento crítico, autocrítica e honestidade intelectual.
+- Refinado o SOUL.md para reforçar a revisão crítica das próprias correções e a transparência sobre arquitetura, memória e capacidades.
+- Executados novamente os testes automatizados: 11 testes passaram.
+
+
+
 ### Aprendizados
 - O limite de tokens continua sendo um parâmetro técnico, não uma meta de tamanho da resposta.
 - A concisão e o aprofundamento sob demanda serão explorados numa etapa posterior.
@@ -101,16 +134,22 @@ Aprender engenharia de agentes de IA construindo um projeto em Python, com exper
 - O contrato comum permite adicionar outro provedor sem alterar a interface esperada pela aplicação.
 - Os motivos de encerramento continuam sendo normalizados entre provedores.
 - O encerramento técnico não garante que a resposta seja suficiente ou factualmente correta.
+- Identidade, comportamento e especialização são conceitos distintos.
+- Mensagens system orientam o comportamento do modelo, mas não garantem obediência ou precisão.
+- Reconhecer um erro não garante que a correção esteja correta.
+- RAG pode complementar o conhecimento do modelo com fontes recuperáveis, mas não substitui verificação e avaliação.
+- Histórico de conversa, memória persistente e acesso a sistemas externos são capacidades distintas.
 
 ### Decisões pendentes
 - Definir como configurar os limites de geração.
 - Investigar como favorecer respostas que concluam unidades de sentido.
 - Projetar uma estratégia de continuação para respostas interrompidas, evitando repetições e perda de contexto.
+- Definir futuramente a arquitetura de memória e conhecimento do Bimo.
+- Avaliar mecanismos de recuperação de informações e verificação de respostas.
 
 ### Próximos passos
-- Implementar um loop de conversa com histórico de mensagens.
-- Investigar instruções de geração e limites adequados para favorecer respostas completas.
-- Avançar na gestão de contexto e memória conforme o roadmap.
+- Consolidar e versionar a implementação atual do Bimo.
+- Definir o objetivo e o escopo da próxima missão antes de iniciar novas implementações.
 
 ## Método de aprendizagem
 1. Entender o problema e formular uma hipótese.

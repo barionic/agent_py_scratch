@@ -20,7 +20,7 @@ class OllamaClient:
             "think": False,
             "stream": False,
             "options": {
-                "num_predict": 128
+                "num_predict": 64 # Experimental, nao definitivo
             },
         }
 

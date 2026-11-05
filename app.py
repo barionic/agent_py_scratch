@@ -1,7 +1,10 @@
 from llm_client import LLMClient, FinishReason, ChatMessage
 
-def main(client: LLMClient):
-    messages: list[ChatMessage] = []
+def main(
+    client: LLMClient,
+    system_messages: list[ChatMessage] | None = None,
+):
+    messages: list[ChatMessage] = list(system_messages or [])
 
     print("Bimo iniciado :) Digite /sair para encerrar.\n")
 
@@ -28,7 +31,7 @@ def main(client: LLMClient):
         if result.finish_reason == FinishReason.LENGTH_LIMIT:
             print("\n[AVISO] A resposta pode estar incompleta devido ao limite de geração.")
         elif result.finish_reason == FinishReason.UNKNOWN:
-                print("\n[AVISO] Não foi possível determinar o motivo de encerramento.")
+            print("\n[AVISO] Não foi possível determinar o motivo de encerramento.")
 
         # Preserva a resposta no histórico da sessão, mesmo se ela tiver sido interrompida
         messages.append(

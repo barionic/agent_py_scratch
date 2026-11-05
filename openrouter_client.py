@@ -59,7 +59,7 @@ class OpenRouterClient:
 
         return GenerationResult(
             text=content,
-            finish_reason = finish_reason,
+            finish_reason=finish_reason,
         )
 
 # Test to run in terminal: LLM_PROVIDER=openrouter LLM_MODEL=nvidia/nemotron-3-ultra-550b-a55b:free python main.py
